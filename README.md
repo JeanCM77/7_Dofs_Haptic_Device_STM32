@@ -50,7 +50,7 @@ Dispositivo háptico y de captura de movimiento de **7 grados de libertad**, de 
 
 ## Cómo empezar
 
-1. **Firmware:** ver [`firmware/README.md`](firmware/README.md)
+1. **Firmware:** ver [`firmware/README.md`](Firmware/README.md)
 2. **Software (Python):** ver [`software/dobot-interface/README.md`](software/dobot-interface/README.md)
 3. **CAD y PCB:** ver [`hardware/README.md`](hardware/README.md)
 
