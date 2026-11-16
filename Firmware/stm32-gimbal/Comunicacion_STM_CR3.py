@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-Puente IMU (STM32 por USB) -> Dobot CR3 (TCP/IP).  Empieza con UN eje y agrega los demas.
+Puente IMU (STM32 por USB) -> Dobot CR3 (TCP/IP), con posicion HOME al iniciar.
 
-  e + Enter = enganchar (la referencia es la posicion actual de IMU y robot)
-  s + Enter = soltar (el robot se queda donde esta)
-  q + Enter = salir
+Flujo:
+  1) Conecta, habilita el robot y (si IR_A_HOME) lo lleva a HOME_JOINTS con un movimiento lento.
+  2) Espera a que lo enganches:  e + Enter  (la referencia es la posicion actual de IMU y robot)
+  3) El robot sigue los cambios de la IMU respecto a ese enganche.
 
+  e + Enter = enganchar | s + Enter = soltar | q + Enter = salir
 Requisitos: pip install pyserial.  Cierra el Monitor Serie de Arduino (usa el mismo puerto).
-Orden de uso: 1) SIMULAR = True (no mueve nada)  2) SIMULAR = False con limites pequenos.
 """
 import math
 import re
@@ -18,31 +19,39 @@ import time
 import serial
 
 # ============================ CONFIGURACION ============================
-ROBOT_IP   = "172.16.2.90"
-PUERTO_STM = "COM14"          # revisa el puerto en el Administrador de dispositivos
+ROBOT_IP   = "172.16.2.62"
+PUERTO_STM = "COM14"
 BAUDIOS    = 115200
 
-SIMULAR      = True          # True = solo imprime lo que enviaria. NO mueve el robot.
+SIMULAR      = False         # True = solo imprime lo que enviaria. NO mueve el robot (ni va a HOME).
 MODO         = "JOINT"       # "JOINT" -> ServoJ (articulaciones) | "POSE" -> ServoP (Rx,Ry,Rz)
-SPEED_FACTOR = 10            # % de velocidad global
-SEND_HZ      = 20            # Dobot recomienda >= 30 ms entre comandos Servo (max ~33 Hz)
+SPEED_FACTOR = 30            # % de velocidad global
+SEND_HZ      = 30            # Dobot recomienda >= 30 ms entre comandos Servo (max ~33 Hz)
 
-# Eje de la IMU -> destino en el robot. Activa UN eje y ve agregando.
+# ---- Posicion HOME al iniciar ----
+IR_A_HOME      = True
+HOME_JOINTS    = (90, 0, 0, 0, -90, 0)   # J1..J6 en grados
+VEL_HOME       = 30                   # % de SpeedJ y AccJ del movimiento a HOME
+CONFIRMAR_HOME = True                 # pide Enter antes de moverse (area despejada)
+AUTO_ENGANCHAR = False                # True = engancha solo al llegar a HOME (la IMU debe estar en neutro)
+TOLERANCIA_HOME = 1.0                 # grados: si alguna articulacion queda mas lejos, avisa
+
+# Eje de la IMU -> destino en el robot.
 #   JOINT: destino = indice de articulacion (0=J1 ... 5=J6)
 #   POSE : destino = indice de [x,y,z,rx,ry,rz] (3=Rx, 4=Ry, 5=Rz)
 DESTINO = {
-    "JOINT": {"R": 5, "P": 4, "Y": 3},
-    "POSE":  {"R": 3, "P": 4, "Y": 5},
+    "JOINT": {"R": 5, "P": 3, "Y": 4},
+    "POSE":  {"R": 3, "P": 3, "Y": 4},
 }
 EJES = {
-    "R": {"activo": True,  "ganancia": 0.5, "signo": 1.0},   # Roll
+    "R": {"activo": True, "ganancia": 0.5, "signo": 1.0},   # Roll
     "P": {"activo": True, "ganancia": 0.5, "signo": 1.0},   # Pitch
     "Y": {"activo": True, "ganancia": 0.5, "signo": 1.0},   # Yaw (deriva: sin magnetometro)
 }
 
-ZONA_MUERTA  = 1.0           # grados de la IMU que se ignoran (filtra ruido y temblor)
-LIMITE_DEG   = 10.0          # maximo desplazamiento respecto a la referencia (grados)
-PASO_MAX_DEG = 1.0           # maximo cambio por envio (limita la velocidad angular)
+ZONA_MUERTA  = 2.0           # grados de la IMU que se ignoran (filtra ruido y temblor)
+LIMITE_DEG   = 30.0          # maximo desplazamiento respecto a la referencia (grados)
+PASO_MAX_DEG = 3.0           # maximo cambio por envio (limita la velocidad angular)
 TIMEOUT_IMU  = 0.3           # s sin datos validos de la IMU -> se suelta solo
 # ======================================================================
 
@@ -63,7 +72,7 @@ class Robot:
     def __init__(self, ip):
         self.dash = socket.create_connection((ip, 29999), timeout=5)
         self.move = socket.create_connection((ip, 30003), timeout=3)
-        self.dash.settimeout(5.0)  # <-- CAMBIA ESTO DE 1.0 a 5.0
+        self.dash.settimeout(5.0)
         self.move.settimeout(0.05)
 
     def _tx(self, sock, cmd):
@@ -98,6 +107,21 @@ class Robot:
         except Exception:
             return -1
 
+    def ir_a_home(self, joints, vel):
+        """Movimiento articular lento a 'joints'. Bloquea hasta terminar (Sync). True si fue bien."""
+        j = ",".join(f"{v:.3f}" for v in joints)
+        self.move.settimeout(2.0)
+        r = self._tx(self.move, f"JointMovJ({j},SpeedJ={vel},AccJ={vel})")
+        print(f"  JointMovJ -> {r}")
+        if r and not r.startswith("0"):
+            self.move.settimeout(0.05)
+            return False
+        self.move.settimeout(120.0)          # el movimiento puede tardar
+        r = self._tx(self.move, "Sync()")
+        print(f"  Sync -> {r}")
+        self.move.settimeout(0.05)
+        return bool(r) and r.startswith("0")
+
     def servo(self, comando, valores):
         cmd = f"{comando}(" + ",".join(f"{v:.3f}" for v in valores) + ")"
         r = self._tx(self.move, cmd)
@@ -130,11 +154,29 @@ def teclado():
 
 
 def leer_imu(ser):
-    """Parsea lineas tipo  P:1.2<TAB>R:3.4<TAB>Y:5.6<TAB>E1:0 ..."""
-    linea = ser.readline().decode("utf-8", errors="ignore").strip()
+    """
+    Parsea líneas tipo:
+    P:1.2\tR:3.4\tY:5.6\tE1:0 ...
+    
+    Vacía el buffer serie y se queda con la última línea recibida.
+    """
+    linea = None
+
+    # Descarta todas las líneas pendientes y conserva la última
+    while ser.in_waiting:
+        linea = ser.readline()
+
+    # Si no había nada pendiente, espera una línea normalmente
+    if linea is None:
+        linea = ser.readline()
+
+    linea = linea.decode("utf-8", errors="ignore").strip()
+
     d = dict(re.findall(r"(\w+):(-?\d+(?:\.\d+)?)", linea))
+
     if all(k in d for k in ("P", "R", "Y")):
         return {k: float(d[k]) for k in ("P", "R", "Y")}
+
     return None
 
 
@@ -151,9 +193,34 @@ def main():
         time.sleep(0.5)
         robot.dashboard(f"SpeedFactor({SPEED_FACTOR})")
 
+        if IR_A_HOME:
+            try:
+                print("Angulos actuales:", [round(v, 2) for v in robot.angulos()])
+                if CONFIRMAR_HOME:
+                    input(f"\nEl robot ira a HOME {HOME_JOINTS} a {VEL_HOME}%.\n"
+                          "Area despejada? Enter para continuar (Ctrl+C cancela)... ")
+                print("Yendo a HOME...")
+                if not robot.ir_a_home(HOME_JOINTS, VEL_HOME):
+                    print("No se pudo completar el movimiento a HOME. Revisa el robot (ClearError / alarma).")
+                    robot.cerrar()
+                    return
+                ang = robot.angulos()
+                print("Angulos en HOME:", [round(v, 2) for v in ang])
+                if any(abs(a - h) > TOLERANCIA_HOME for a, h in zip(ang, HOME_JOINTS)):
+                    print("AVISO: el robot no quedo exactamente en HOME (fuera de tolerancia).")
+            except KeyboardInterrupt:
+                print("\nCancelado: ResetRobot()")
+                robot.dashboard("ResetRobot()")
+                robot.cerrar()
+                return
+
     ser = serial.Serial(PUERTO_STM, BAUDIOS, timeout=0.05)
     threading.Thread(target=teclado, daemon=True).start()
-    print("Listo. 'e' = enganchar, 's' = soltar, 'q' = salir.")
+    if AUTO_ENGANCHAR:
+        estado["pedir"] = True
+        print("Listo. Enganche automatico con la primera lectura de la IMU. 's' = soltar, 'q' = salir.")
+    else:
+        print("Listo. Pon la IMU en neutro y pulsa 'e' para enganchar. 's' = soltar, 'q' = salir.")
 
     imu, ref_imu, ref, cmd = None, None, None, None
     t_rx = time.time()

@@ -437,10 +437,11 @@ void loop() {
   }
 
   static unsigned long tP = 0;
-  if (millis() - tP > 40) {
+  if (millis() - tP > 20) {            // 50 Hz (antes 40 ms)
     tP = millis();
     int32_t e[4];
     leerEncoders(e);
+    Serial.print("T:");  Serial.print(millis());
     Serial.print("P:");  Serial.print(pitch, 3);
     Serial.print("\tR:"); Serial.print(roll, 3);
     Serial.print("\tY:"); Serial.print(yaw, 3);
