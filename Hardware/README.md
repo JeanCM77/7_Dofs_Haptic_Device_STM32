@@ -51,20 +51,11 @@ Para facilitar la replicación o modificación de las placas, cada subcarpeta in
 
 ## 📸 Galería de Ensamblaje
 
-<p align="center">
-  <img src="Docs\Imagenes\Estructura.png" alt="Render Mecánico" width="80%">
-  <br><i>(Reemplaza con un render CAD o foto de la estructura y el gimbal)</i>
-</p>
+![Render Mecánico de Fusion 360](../Docs/Imagenes/Estructura.png)
+*Render del ensamblaje del Gimbal en Fusion 360.*
 
-<p align="center">
-  <img src="Docs\Imagenes\Estructura.png" alt="Render del ensamblaje del Gimbal en Fusion 360" width="100%">
-  <br><i>Render Mecánico de Fusion 360</i>
-</p>
+![PCB en EasyEDA](../Docs/Imagenes/3D_PCB_GIMBALL.png)
+*Vista 3D de la PCB principal ruteada en EasyEDA.*
 
-<p align="center">
-  <img src="Docs\Imagenes\3D_PCB_GIMBALL.png" alt="PCB en EasyEDA" width="100%">
-  <br><i>Vista 3D de la PCB principal ruteada en EasyEDA</i>
-</p>
-
-![Ensamblaje Físico](../Docs/Imagenes/3D_PCB_GIMBALL.png)
+![Ensamblaje Físico](../Docs/Imagenes/hardware_ensamblaje_real.jpg)
 *Detalle del ensamblaje físico del marco, los tensores y el enrutamiento de cables.*
