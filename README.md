@@ -70,10 +70,19 @@ La interfaz maestra se comunica con el esclavo (Dobot CR3) a través de una PC i
 ```
 8_Dofs_Haptic_Device_STM32/
 ├── Control/                   ← Modelos matemáticos, cinemática directa/inversa y simulaciones de control
-├── Docs/                      ← Documentación teórica, artículos del estado del arte (Scopus) y diagramas
-├── Firmware/                  ← Código fuente C/C++ para el STM32 (lectura IMU, encoders hw, PWM)
+├── Docs/
+│   ├── Estado-del-arte/       ← Documentación teórica, artículos del estado del arte (Scopus)
+│   └── Imagenes/              ← Renders, fotos y diagramas relacionado al proyecto
+│   └── Presentaciones/        ← Diapostivas e informacion utilizada en exposiciones                    
+├── Firmware/
+│   └── stm32-gimbal/          ← Código fuente C/C++ para el STM32 (lectura IMU, encoders hw, PWM)
 ├── Hardware/
-│   ├── Electronica/           ← Esquemáticos y proyectos de PCBs
+│   ├── Electronica/
+│       ├── datasheets/        ← Hojas de datos de los componentes electronicos utilizados 
+│       ├── pcb-gimbal/        ← Esquemáticos de la pcb del gimball
+│           ├── easyeda/       ← Archivos EsayEda para ser importados
+│           ├── gerbers/       ← Archivos Gerber para ser usados en la Maquina CNC para fabricar el circuito
+│       ├── pcb-motores/       ←
 │   └── Mecanica/              ← Archivos STL/STEP del marco de aluminio y piezas del gimbal 3D
 ├── Pruebas/                   ← Scripts de recolección de datos y análisis de latencia
 └── Software/                  ← Nodos de ROS y scripts de Python para comunicación TCP/IP directa con CR3
