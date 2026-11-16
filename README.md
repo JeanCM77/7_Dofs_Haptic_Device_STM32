@@ -83,9 +83,14 @@ La interfaz maestra se comunica con el esclavo (Dobot CR3) a través de una PC i
 │           ├── easyeda/       ← Archivos EsayEda para ser importados
 │           └── gerbers/       ← Archivos Gerber para ser usados en la Maquina CNC para fabricar el circuito
 │       └── pcb-motores/       ←
-│   └── Mecanica/              ← Archivos STL/STEP del marco de aluminio y piezas del gimbal 3D
-├── Pruebas/                   ← Scripts de recolección de datos y análisis de latencia
-└── Software/                  ← Nodos de ROS y scripts de Python para comunicación TCP/IP directa con CR3
+│   └── Mecanica/
+│       ├── Estructura-marco/  ← Archivos STL/STEP del marco de aluminio y accesorios para los motores
+│       └── Gimbal/            ← Archivos STL/STEP del gimbal 3D
+├── Pruebas/
+│   ├── Datos/                 ← Scripts de recolección de datos y análisis de latencia
+└── Software/
+│   ├── dobot-interface/       ← scripts de Python para comunicación TCP/IP directa con CR3
+│   └── simulacion/            ← scripts de Python para simulacion
 ```
 ---
 
