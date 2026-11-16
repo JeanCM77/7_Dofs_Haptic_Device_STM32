@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Docs/Imagenes/hero_image.png" alt="Haptic Device Hero Image" width="100%">
+  <img src="Docs\Imagenes\Gimball.png" alt="Haptic Device Hero Image" width="100%">
 </p>
 
 <h1 align="center">Dispositivo Háptico Impulsado por Cables de 7 DoF (STM32)</h1>
@@ -37,7 +37,7 @@ El sistema está diseñado para resolver problemas clásicos de los robots paral
 
 ### 1. Diseño Mecánico
 <p align="center">
-  <img src="Docs/Imagenes/mecanica_render.png" alt="Render Mecánico" width="80%">
+  <img src="Docs\Imagenes\Estructura.png" alt="Render Mecánico" width="80%">
   <br><i>(Reemplaza con un render CAD o foto de la estructura y el gimbal)</i>
 </p>
 
