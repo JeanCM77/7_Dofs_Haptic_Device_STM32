@@ -46,7 +46,7 @@ El gimbal se encuentra suspendido por los 4 cables. Los motores N20 están integ
 ### 2. Electrónica y Control (Hardware-in-the-Loop)
 <p align="center">
   <img src="Docs\Imagenes\diagrama_bloques_gimbal_stm32.png" alt="Esquema Electrónico" width="80%">
-  <br><i>(Reemplaza con un diagrama de bloques de las conexiones)</i>
+  <br><i>(Diagrama de bloques de las conexiones)</i>
 </p>
 
 El procesamiento se realiza mediante una placa **WeAct STM32F405RGT6**, garantizando un entorno de tiempo real estricto (Hard Real-Time) sin latencias de sistema operativo.
