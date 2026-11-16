@@ -38,14 +38,14 @@ El sistema está diseñado para resolver problemas clásicos de los robots paral
 ### 1. Diseño Mecánico
 <p align="center">
   <img src="Docs\Imagenes\Estructura.png" alt="Render Mecánico" width="80%">
-  <br><i>(Reemplaza con un render CAD o foto de la estructura y el gimbal)</i>
+  <br><i>(CAD de la estructura mecanica con el gimbal)</i>
 </p>
 
 El gimbal se encuentra suspendido por los 4 cables. Los motores N20 están integrados dentro del gimbal ("hacia adentro") para actuar directamente sobre las articulaciones de la mano, mientras que la odometría de traslación se mide en las esquinas de la estructura principal.
 
 ### 2. Electrónica y Control (Hardware-in-the-Loop)
 <p align="center">
-  <img src="Docs/Imagenes/esquema_electronico.png" alt="Esquema Electrónico" width="80%">
+  <img src="Docs\Imagenes\diagrama_bloques_gimbal_stm32.png" alt="Esquema Electrónico" width="80%">
   <br><i>(Reemplaza con un diagrama de bloques de las conexiones)</i>
 </p>
 
@@ -60,8 +60,8 @@ El procesamiento se realiza mediante una placa **WeAct STM32F405RGT6**, garantiz
   <img src="Docs/Imagenes/arquitectura_software.png" alt="Arquitectura de Software" width="80%">
 </p>
 
-La interfaz maestra se comunica con el esclavo (Dobot CR3) a través de una PC/ROS intermediaria:
-`STM32 (USB-CDC Alta Velocidad) ➔ PC / ROS (Cinemática Inversa) ➔ TCP/IP ➔ Dobot CR3`
+La interfaz maestra se comunica con el esclavo (Dobot CR3) a través de una PC intermediaria:
+`STM32 (USB-CDC Alta Velocidad) ➔ PC (Cinemática Inversa) ➔ TCP/IP ➔ Dobot CR3`
 
 ---
 
