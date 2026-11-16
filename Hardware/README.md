@@ -66,5 +66,5 @@ Para facilitar la replicación o modificación de las placas, cada subcarpeta in
   <br><i>Vista 3D de la PCB principal ruteada en EasyEDA</i>
 </p>
 
-![Ensamblaje Físico](../Docs/Imagenes/hardware_ensamblaje_real.jpg)
+![Ensamblaje Físico](../Docs/Imagenes/3D_PCB_GIMBALL.png)
 *Detalle del ensamblaje físico del marco, los tensores y el enrutamiento de cables.*
