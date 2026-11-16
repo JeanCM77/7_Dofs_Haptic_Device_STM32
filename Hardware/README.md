@@ -53,10 +53,10 @@ Para facilitar la replicación o modificación de las placas, cada subcarpeta in
 
 *(Reemplaza estas etiquetas con imágenes reales de tu proyecto)*
 
-![Render Mecánico de Fusion 360](Docs\Imagenes\Estructura.png)
+![Render Mecánico de Fusion 360](../Docs\Imagenes\Estructura.png)
 *Render del ensamblaje del Gimbal en Fusion 360.*
 
-![PCB en EasyEDA](Docs\Imagenes\3D_PCB_GIMBALL.png)
+![PCB en EasyEDA](../Docs\Imagenes\3D_PCB_GIMBALL.png)
 *Vista 3D de la PCB principal ruteada en EasyEDA.*
 
 ![Ensamblaje Físico](../Docs/Imagenes/hardware_ensamblaje_real.jpg)
