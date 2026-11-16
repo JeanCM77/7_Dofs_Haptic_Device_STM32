@@ -52,6 +52,7 @@ Para facilitar la replicación o modificación de las placas, cada subcarpeta in
 ## 📸 Galería de Ensamblaje
 
 ![Render Mecánico de Fusion 360](../Docs/Imagenes/Estructura.png)
+
 *Render del ensamblaje del Gimbal en Fusion 360.*
 
 ![PCB en EasyEDA](../Docs/Imagenes/3D_PCB_GIMBALL.png)
