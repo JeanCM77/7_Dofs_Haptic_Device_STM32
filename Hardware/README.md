@@ -52,6 +52,11 @@ Para facilitar la replicación o modificación de las placas, cada subcarpeta in
 ## 📸 Galería de Ensamblaje
 
 <p align="center">
+  <img src="Docs\Imagenes\Estructura.png" alt="Render Mecánico" width="80%">
+  <br><i>(Reemplaza con un render CAD o foto de la estructura y el gimbal)</i>
+</p>
+
+<p align="center">
   <img src="Docs\Imagenes\Estructura.png" alt="Render del ensamblaje del Gimbal en Fusion 360" width="100%">
   <br><i>Render Mecánico de Fusion 360</i>
 </p>
