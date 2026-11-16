@@ -67,6 +67,7 @@ La interfaz maestra se comunica con el esclavo (Dobot CR3) a través de una PC i
 
 ## 📂 Estructura del Repositorio
 
+```
 8_Dofs_Haptic_Device_STM32/
 ├── Control/                   ← Modelos matemáticos, cinemática directa/inversa y simulaciones de control
 ├── Docs/                      ← Documentación teórica, artículos del estado del arte (Scopus) y diagramas
@@ -76,7 +77,7 @@ La interfaz maestra se comunica con el esclavo (Dobot CR3) a través de una PC i
 │   └── Mecanica/              ← Archivos STL/STEP del marco de aluminio y piezas del gimbal 3D
 ├── Pruebas/                   ← Scripts de recolección de datos y análisis de latencia
 └── Software/                  ← Nodos de ROS y scripts de Python para comunicación TCP/IP directa con CR3
-
+```
 ---
 
 ## 🔌 Pinout y Conexiones (STM32F405)
