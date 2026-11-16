@@ -67,16 +67,15 @@ La interfaz maestra se comunica con el esclavo (Dobot CR3) a través de una PC i
 
 ## 📂 Estructura del Repositorio
 
-El proyecto está modularizado de la siguiente manera:
-
-* 📁 **`/Control`**: Modelos matemáticos, cinemática directa/inversa y simulaciones de estrategias de control (compensación de fricción, control de tensión).
-* 📁 **`/Docs`**: Documentación teórica, artículos del estado del arte (Scopus), presentaciones y diagramas.
-* 📁 **`/Firmware`**: Código fuente C/C++ para el STM32 (lectura de IMU, decodificación de encoders por hardware, generación de PWM).
-* 📁 **`/Hardware`**: 
-  * `Electronica/`: Esquemáticos y PCBs.
-  * `Mecanica/`: Archivos STL/STEP del marco de aluminio y las piezas del gimbal impresas en 3D.
-* 📁 **`/Pruebas`**: Scripts de recolección de datos y análisis de latencia.
-* 📁 **`/Software`**: Nodos de ROS y scripts de Python para la comunicación TCP/IP directa con el Dobot CR3.
+8_Dofs_Haptic_Device_STM32/
+├── Control/                   ← Modelos matemáticos, cinemática directa/inversa y simulaciones de control
+├── Docs/                      ← Documentación teórica, artículos del estado del arte (Scopus) y diagramas
+├── Firmware/                  ← Código fuente C/C++ para el STM32 (lectura IMU, encoders hw, PWM)
+├── Hardware/
+│   ├── Electronica/           ← Esquemáticos y proyectos de PCBs
+│   └── Mecanica/              ← Archivos STL/STEP del marco de aluminio y piezas del gimbal 3D
+├── Pruebas/                   ← Scripts de recolección de datos y análisis de latencia
+└── Software/                  ← Nodos de ROS y scripts de Python para comunicación TCP/IP directa con CR3
 
 ---
 
