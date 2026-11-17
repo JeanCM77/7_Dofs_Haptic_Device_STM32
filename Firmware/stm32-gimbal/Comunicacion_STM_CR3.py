@@ -44,9 +44,9 @@ DESTINO = {
     "POSE":  {"R": 3, "P": 3, "Y": 4},
 }
 EJES = {
-    "R": {"activo": True, "ganancia": 0.5, "signo": 1.0},   # Roll
-    "P": {"activo": True, "ganancia": 0.5, "signo": 1.0},   # Pitch
-    "Y": {"activo": True, "ganancia": 0.5, "signo": 1.0},   # Yaw (deriva: sin magnetometro)
+    "R": {"activo": True, "ganancia": 1, "signo": 1.0},   # Roll
+    "P": {"activo": True, "ganancia": 1, "signo": 1.0},   # Pitch
+    "Y": {"activo": True, "ganancia": 1, "signo": 1.0},   # Yaw (deriva: sin magnetometro)
 }
 
 ZONA_MUERTA  = 2.0           # grados de la IMU que se ignoran (filtra ruido y temblor)
@@ -138,7 +138,7 @@ class Robot:
                 pass
 
 
-estado = {"pedir": False, "enganchado": False, "salir": False}
+estado = {"pedir": False, "enganchado": False, "salir": False, "calibrar": False}
 
 
 def teclado():
@@ -151,6 +151,8 @@ def teclado():
             print("Soltado: el robot se queda donde esta.")
         elif c == "q":
             estado["salir"] = True
+        elif c == "c":
+            estado["calibrar"] = True
 
 
 def leer_imu(ser):
@@ -228,6 +230,17 @@ def main():
 
     try:
         while not estado["salir"]:
+            # --- NUEVO BLOQUE DE CALIBRACIÓN ---
+            if estado["calibrar"]:
+                estado["calibrar"] = False
+                estado["enganchado"] = False  # Soltamos el robot por seguridad
+                print("\n[!] Calibrando IMU. ¡NO MUEVAS EL SENSOR!")
+                ser.write(b'c')       # Enviar comando al STM32
+                time.sleep(2.5)       # Esperar a que el STM32 termine (~1.5s de delay interno)
+                ser.reset_input_buffer() # Limpiar basura acumulada en el buffer
+                print("IMU calibrada y estabilizada. Presiona 'e' para volver a enganchar.")
+            # -----------------------------------
+
             nuevo = leer_imu(ser)
             if nuevo:
                 imu, t_rx = nuevo, time.time()
