@@ -22,7 +22,7 @@
 El sistema está diseñado para resolver problemas clásicos de los robots paralelos impulsados por cables (CDPR), como el destensado y la fricción, dividiendo los 7 grados de libertad en dos subsistemas mecánicos:
 
 1. **Traslación Espacial (3 DoF - X, Y, Z):** 
-   - Marco cúbico accesible ($70 \times 70 \times 70\text{ cm}$).
+   - Marco cúbico accesible ($84 \times 84 \times 84\text{ cm}$).
    - Red de 4 cables anclados a un anillo de convergencia suspendido.
    - **Sistema Anti-destensado:** Uso de resortes de fuerza constante anclados en las esquinas superiores para mantener la tensión de los cables de forma mecánica en todo momento.
 2. **Orientación y Gripper (4 DoF - Roll, Pitch, Yaw + Agarre):** 
