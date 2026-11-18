@@ -19,13 +19,13 @@ import time
 import serial
 
 # ============================ CONFIGURACION ============================
-ROBOT_IP   = "172.16.2.62"
+ROBOT_IP   = "172.16.2.24"
 PUERTO_STM = "COM14"
 BAUDIOS    = 115200
 
 SIMULAR      = False         # True = solo imprime lo que enviaria. NO mueve el robot (ni va a HOME).
 MODO         = "JOINT"       # "JOINT" -> ServoJ (articulaciones) | "POSE" -> ServoP (Rx,Ry,Rz)
-SPEED_FACTOR = 30            # % de velocidad global
+SPEED_FACTOR = 50            # % de velocidad global
 SEND_HZ      = 30            # Dobot recomienda >= 30 ms entre comandos Servo (max ~33 Hz)
 
 # ---- Posicion HOME al iniciar ----
